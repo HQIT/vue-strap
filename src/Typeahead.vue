@@ -109,7 +109,7 @@ export default {
     },
     show () {
       if (this.value == ""){
-        this.items = (this.data || []).splice(0, this.limit);
+        this.items = (this.data || []).slice(0, this.limit);
         this.showDropdown = this.items.length > 0;
       }
     }
