@@ -149,9 +149,6 @@ export default {
       }
       this.valid = this.validate()
     },
-    content (val) {
-      console.log('content', val);
-    },
   },
   methods: {
     close () {
@@ -188,7 +185,7 @@ export default {
       if (this.val instanceof Array) {
         var newVal = this.val.slice(0)
         if (~newVal.indexOf(v)) {
-          if (newVal.length < this.minSelect) {
+          if (newVal.length - 1 < this.minSelect) {
             this.notify = true;
             if (timeout.limit) clearTimeout(timeout.limit);
             timeout.limit = setTimeout(() => {
@@ -343,6 +340,7 @@ export default {
 .notify.in {
   opacity: .9;
   bottom: 5px;
+  box-sizing: border-box;
 }
 .btn-group-justified .dropdown-toggle>span:not(.close) {
   width: calc(100% - 18px);
