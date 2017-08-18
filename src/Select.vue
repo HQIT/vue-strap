@@ -147,7 +147,10 @@ export default {
         }, 1500)
       }
       this.valid = this.validate()
-    }
+    },
+    content (val) {
+      console.log('content', val);
+    },
   },
   methods: {
     close () {
