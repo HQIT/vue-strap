@@ -7,7 +7,7 @@
       @keydown.space.stop.prevent="toggle"
       @keydown.enter.stop.prevent="toggle"
     >
-      <span class="btn-content" v-html="loading ? text.loading : showPlaceholder || (multiple && showCount ? selectedText : selected)"></span>
+      <span class="btn-content" v-html="loading ? text.loading : showPlaceholder || (multiple && showCount ? selectedText : (content !== '' ? content : selected))"></span>
       <span v-if="clearButton&&values.length" class="close" @click="clear()">&times;</span>
     </div>
     <select ref="sel" v-model="val" :name="name" class="secret" :multiple="multiple" :required="required" :readonly="readonly" :disabled="disabled">
@@ -69,7 +69,9 @@ export default {
     countText: {type: String, default: null},
     showCount: {type: Boolean, default: false},
     url: {type: String, default: null},
-    value: null
+    value: null,
+    content: {type: String, default: ''},
+    minSelect: {type: Number, default: 0},
   },
   data () {
     return {
@@ -94,7 +96,7 @@ export default {
     hasParent () { return this.parent instanceof Array ? this.parent.length : this.parent },
     inInput () { return this.$parent._input },
     isLi () { return this.$parent._navbar || this.$parent.menu || this.$parent._tabset },
-    limitText () { return this.text.limit.replace('{{limit}}', this.limit) },
+    limitText () { return this.val.length === this.minSelect ? '至少选择一项' : '至多选择' + this.limit + '项' },
     selected () {
       if (this.list.length === 0) { return '' }
       var sel = this.values.map(val => (this.list.find(o => o[this.optionsValue] === val) || {})[this.optionsLabel]).filter(val => val !== undefined)
@@ -146,7 +148,7 @@ export default {
         }, 1500)
       }
       this.valid = this.validate()
-    }
+    },
   },
   methods: {
     close () {
@@ -183,7 +185,16 @@ export default {
       if (this.val instanceof Array) {
         var newVal = this.val.slice(0)
         if (~newVal.indexOf(v)) {
-          newVal.splice(newVal.indexOf(v), 1)
+          if (newVal.length - 1 < this.minSelect) {
+            this.notify = true;
+            if (timeout.limit) clearTimeout(timeout.limit);
+            timeout.limit = setTimeout(() => {
+              timeout.limit = false;
+              this.notify = false
+            }, 1500)
+          } else {
+            newVal.splice(newVal.indexOf(v), 1);
+          }
         } else {
           newVal.push(v)
         }
@@ -328,6 +339,7 @@ export default {
 .notify.in {
   opacity: .9;
   bottom: 5px;
+  box-sizing: border-box;
 }
 .btn-group-justified .dropdown-toggle>span:not(.close) {
   width: calc(100% - 18px);
