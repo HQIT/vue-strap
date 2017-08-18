@@ -149,10 +149,7 @@ export default {
       } else if (val instanceof Array && val.length < this.minSelect) {
         console.log('new', val);
         console.log('old', old);
-        this.val = [];
-        this.old.map(function (val) {
-          this.val.push(val);
-        });
+        this.val = old;
         this.notify = true;
         if (timeout.limit) clearTimeout(timeout.limit)
         timeout.limit = setTimeout(() => {
