@@ -96,7 +96,7 @@ export default {
     hasParent () { return this.parent instanceof Array ? this.parent.length : this.parent },
     inInput () { return this.$parent._input },
     isLi () { return this.$parent._navbar || this.$parent.menu || this.$parent._tabset },
-    limitText () { return this.text.limit.replace('{{limit}}', this.limit) },
+    limitText () { return this.val.length === this.minSelect ? '至少选择一项' : '至多选择' + this.limit + '项' },
     selected () {
       if (this.list.length === 0) { return '' }
       var sel = this.values.map(val => (this.list.find(o => o[this.optionsValue] === val) || {})[this.optionsLabel]).filter(val => val !== undefined)
@@ -147,7 +147,12 @@ export default {
           this.notify = false
         }, 1500)
       } else if (val instanceof Array && val.length < this.minSelect) {
-        this.val = old;
+        console.log('new', val);
+        console.log('old', old);
+        this.val = [];
+        this.old.map(function (val) {
+          this.val.push(val);
+        });
         this.notify = true;
         if (timeout.limit) clearTimeout(timeout.limit)
         timeout.limit = setTimeout(() => {
