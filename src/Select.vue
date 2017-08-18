@@ -255,7 +255,6 @@ export default {
       parent.children.push(this)
       this._parent = parent
     }
-    console.log('contentCreate', this.content);
   },
   mounted () {
     if (this._parent) this._parent.children.push(this)
