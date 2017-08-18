@@ -71,6 +71,7 @@ export default {
     url: {type: String, default: null},
     value: null,
     content: {type: String, default: ''},
+    minSelect: {type: Number, default: 0},
   },
   data () {
     return {
@@ -140,6 +141,14 @@ export default {
       if (val instanceof Array && val.length > this.limit) {
         this.val = val.slice(0, this.limit)
         this.notify = true
+        if (timeout.limit) clearTimeout(timeout.limit)
+        timeout.limit = setTimeout(() => {
+          timeout.limit = false
+          this.notify = false
+        }, 1500)
+      } else if (val instanceof Array && val.length < this.minSelect) {
+        this.val = old;
+        this.notify = true;
         if (timeout.limit) clearTimeout(timeout.limit)
         timeout.limit = setTimeout(() => {
           timeout.limit = false
