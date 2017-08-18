@@ -145,7 +145,9 @@ export default {
       } else if (val instanceof Array && val.length < this.minSelect) {
         console.log('new', val);
         console.log('old', old);
-        this.val = old.slice(0, this.minSelect);
+        var temp = [];
+        temp.push(old[0]);
+        this.val = temp;
         this.notify = true;
         if (timeout.limit) clearTimeout(timeout.limit)
         timeout.limit = setTimeout(() => {
