@@ -134,6 +134,10 @@ export default {
     },
     val (val, old) {
       if (val === undefined) { this.val = val = null }
+      if (val !== old) {
+        this.$emit('change', val)
+        this.$emit('input', val)
+      }
       if (val instanceof Array && val.length > this.limit) {
         this.val = val.slice(0, this.limit)
         this.notify = true
@@ -142,24 +146,7 @@ export default {
           timeout.limit = false
           this.notify = false
         }, 1500)
-      } else if (val instanceof Array && val.length < this.minSelect) {
-        console.log('new', val);
-        console.log('old', old);
-        var temp = [];
-        temp.push(old[0]);
-        this.val = temp;
-        this.notify = true;
-        if (timeout.limit) clearTimeout(timeout.limit)
-        timeout.limit = setTimeout(() => {
-          timeout.limit = false
-          this.notify = false
-        }, 1500)
       }
-      if (val !== old) {
-        this.$emit('change', val)
-        this.$emit('input', val)
-      }
-
       this.valid = this.validate()
     },
     content (val) {
@@ -201,7 +188,16 @@ export default {
       if (this.val instanceof Array) {
         var newVal = this.val.slice(0)
         if (~newVal.indexOf(v)) {
-          newVal.splice(newVal.indexOf(v), 1)
+          if (newVal.length < this.minSelect) {
+            this.notify = true;
+            if (timeout.limit) clearTimeout(timeout.limit);
+            timeout.limit = setTimeout(() => {
+              timeout.limit = false;
+              this.notify = false
+            }, 1500)
+          } else {
+            newVal.splice(newVal.indexOf(v), 1);
+          }
         } else {
           newVal.push(v)
         }
