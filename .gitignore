@@ -7,5 +7,5 @@ npm-debug.log
 static
 vue-strap.sublime-project
 vue-strap.sublime-workspace
-dist/*.map
-dist/
+/dist/
+/dist/*.map
