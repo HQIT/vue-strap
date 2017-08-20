@@ -56,7 +56,6 @@ export default {
 }
 .fade-enter,
 .fade-leave-active {
-  height: 0;
   opacity: 0;
 }
 .alert.top {
