@@ -7,7 +7,7 @@
       @keydown.space.stop.prevent="toggle"
       @keydown.enter.stop.prevent="toggle"
     >
-      <span class="btn-content" v-html="loading ? text.loading : showPlaceholder || (multiple && showCount ? selectedText : (content !== '' ? content : selected))"></span>
+      <span class="btn-content" v-html="loading ? text.loading : showPlaceholder || (multiple && showCount ? (content !== '' ? content : selectedText) : (content !== '' ? content : selected))"></span>
       <span v-if="clearButton&&values.length" class="close" @click="clear()">&times;</span>
     </div>
     <select ref="sel" v-model="val" :name="name" class="secret" :multiple="multiple" :required="required" :readonly="readonly" :disabled="disabled">
