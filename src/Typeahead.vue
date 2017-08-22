@@ -4,6 +4,7 @@
       v-model="val"
       :placeholder="placeholder"
       :type.once="type"
+      @click="show"
       @blur="showDropdown = false"
       @keydown.down.prevent="down"
       @keydown.enter="hit"
@@ -105,6 +106,12 @@ export default {
     down () {
       if (this.current < this.items.length - 1) { this.current++ }
       else { this.current = 0 }
+    },
+    show () {
+      if (this.value == ""){
+        this.items = (this.data || []).slice(0, this.limit);
+        this.showDropdown = this.items.length > 0;
+      }
     }
   },
   created () {
