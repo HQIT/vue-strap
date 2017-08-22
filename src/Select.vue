@@ -23,7 +23,12 @@
           />
           <span v-show="searchValue" class="close" @click="clearSearch">&times;</span>
         </li>
-        <li v-if="required&&!clearButton"><a @mousedown.prevent="clear() && close()">{{ placeholder || text.notSelected }}</a></li>
+        <li v-if="required&&!clearButton">
+          <a @mousedown.prevent="clear() && close()">
+            <span>{{ placeholder || text.notSelected }}</span>
+            <span class="glyphicon glyphicon-ok check-mark" v-show="val === null || val.length <= 0"></span>
+          </a>
+        </li>
         <li v-for="option in filteredOptions" :id="option[optionsValue]">
           <a @mousedown.prevent="select(option[optionsValue])">
             <span v-html="option[optionsLabel]"></span>
