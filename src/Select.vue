@@ -7,7 +7,7 @@
       @keydown.space.stop.prevent="toggle"
       @keydown.enter.stop.prevent="toggle"
     >
-      <span class="btn-content" v-html="loading ? text.loading : showPlaceholder || (multiple && showCount ? selectedText : (content !== '' ? content : selected))"></span>
+      <span class="btn-content" v-html="loading ? text.loading : showPlaceholder || (multiple && showCount ? (content !== '' ? content : selectedText) : (content !== '' ? content : selected))"></span>
       <span v-if="clearButton&&values.length" class="close" @click="clear()">&times;</span>
     </div>
     <select ref="sel" v-model="val" :name="name" class="secret" :multiple="multiple" :required="required" :readonly="readonly" :disabled="disabled">
@@ -146,6 +146,20 @@ export default {
           timeout.limit = false
           this.notify = false
         }, 1500)
+      }
+      if (val || (val && val.length)) {
+        // 如果用户传入的是简单string数组或string，则进行一次封装
+        if (val instanceof Array && val[0][this.optionsValue] === undefined) {
+          this.val = val.map(val => ({
+            label: val,
+            value: val,
+          }));
+        } else if (val[this.optionsValue] === undefined) {
+          this.val = {
+            label: val,
+            value: val,
+          }
+        }
       }
       this.valid = this.validate()
     },
