@@ -133,11 +133,14 @@ export default {
       if (val !== old) { this.val = val }
     },
     val (val, old) {
+      console.log('valChange', 'in1');
       if (val === undefined) { this.val = val = null }
       if (val !== old) {
+        console.log('valChange', 'in2');
         this.$emit('change', val)
         this.$emit('input', val)
       }
+      console.log('valChange', 'in3');
       if (val instanceof Array && val.length > this.limit) {
         this.val = val.slice(0, this.limit)
         this.notify = true
