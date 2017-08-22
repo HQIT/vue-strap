@@ -147,6 +147,20 @@ export default {
           this.notify = false
         }, 1500)
       }
+      if (val || (val && val.length)) {
+        // 如果用户传入的是简单string数组或string，则进行一次封装
+        if (val instanceof Array && val[0][this.optionsValue] === undefined) {
+          this.val = val.map(val => ({
+            label: val,
+            value: val,
+          }));
+        } else if (val[this.optionsValue] === undefined) {
+          this.val = {
+            label: val,
+            value: val,
+          }
+        }
+      }
       this.valid = this.validate()
     },
   },
