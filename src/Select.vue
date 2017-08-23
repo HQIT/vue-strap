@@ -30,8 +30,8 @@
           </a>
         </li>
         <li v-for="option in filteredOptions"  :id="option[optionsValue]" :class="{'dropdown-header':option.separator}">
-          <a v-if="option.separator" v-html="option[optionsLabel]"></a>
-          <a v-else @mousedown.prevent="select(option[optionsValue])">
+          <a v-if="option.separator" @mousedown.prevent="select(option[optionsValue], false)" v-html="option[optionsLabel]"></a>
+          <a v-else @mousedown.prevent="select(option[optionsValue], true)">
             <span v-html="option[optionsLabel]"></span>
             <span class="glyphicon glyphicon-ok check-mark" v-show="isSelected(option[optionsValue])"></span>
           </a>
@@ -191,7 +191,7 @@ export default {
     isSelected (v) {
       return this.values.indexOf(v) > -1
     },
-    select (v) {
+    select (v, autoClose) {
       if (this.val instanceof Array) {
         var newVal = this.val.slice(0)
         if (~newVal.indexOf(v)) {
@@ -209,12 +209,12 @@ export default {
           newVal.push(v)
         }
         this.val = newVal
-        if (this.closeOnSelect) {
+        if (this.closeOnSelect && autoClose) {
           this.toggle()
         }
       } else {
-        this.val = v
-        this.toggle()
+        this.val = v;
+        if (autoClose) this.toggle()
       }
     },
     setOptions (options) {
@@ -303,6 +303,10 @@ export default {
   padding-left: 0;
   padding-right: 0;
   cursor: default;
+  color: #777;
+}
+.dropdown-header a:hover {
+  background-color: #fff;
   color: #777;
 }
 .bs-searchbox {
