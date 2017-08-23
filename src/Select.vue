@@ -29,8 +29,9 @@
             <span class="glyphicon glyphicon-ok check-mark" v-show="val === null || val.length <= 0"></span>
           </a>
         </li>
-        <li v-for="option in filteredOptions" :id="option[optionsValue]">
-          <a @mousedown.prevent="select(option[optionsValue])">
+        <li v-for="option in filteredOptions"  :id="option[optionsValue]" :class="{'dropdown-header':option.separator}"><!--<li class="dropdown-header">Dropdown header</li>-->
+          <a v-if="option.separator" v-html="option[optionsLabel]"></a>
+          <a v-else @mousedown.prevent="select(option[optionsValue])">
             <span v-html="option[optionsLabel]"></span>
             <span class="glyphicon glyphicon-ok check-mark" v-show="isSelected(option[optionsValue])"></span>
           </a>
@@ -77,6 +78,7 @@ export default {
     value: null,
     content: {type: String, default: ''},
     minSelect: {type: Number, default: 0},
+    separators: {type: Object, default: null},
   },
   data () {
     return {
@@ -112,7 +114,10 @@ export default {
     showPlaceholder () { return (this.values.length === 0 || !this.hasParent) ? (this.placeholder || this.text.notSelected) : null },
     text () { return translations(this.lang) },
     values () { return this.val instanceof Array ? this.val : ~[null, undefined].indexOf(this.val) ? [] : [this.val] },
-    valOptions () { return this.list.map(el => el[this.optionsValue]) }
+    valOptions () { return this.list.map(el => el[this.optionsValue]) },
+    optionsHeaderLength () {
+      return this.filteredOptions.length + this.separators ? this.separators.reduce((pre, curr) => pre + curr ? 1 : 0) : 0;
+    }
   },
   watch: {
     options (options) {
@@ -213,13 +218,15 @@ export default {
       }
     },
     setOptions (options) {
+      console.log('this is new version');
       this.list = options.map(el => {
         if (el instanceof Object) { return el }
-        let obj = {}
-        obj[this.optionsLabel] = el
-        obj[this.optionsValue] = el
+        let obj = {};
+        obj[this.optionsLabel] = el;
+        obj[this.optionsValue] = el;
+        obj.seperator = el.seperator;
         return obj
-      })
+      });
       this.$emit('options', this.list)
     },
     toggle () {
@@ -293,8 +300,12 @@ export default {
   border-left: 4px solid transparent;
 }
 .bs-searchbox {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   position: relative;
   margin: 4px 8px;
+  height: 30px;
 }
 .bs-searchbox .close {
   position: absolute;
