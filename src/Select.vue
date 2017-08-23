@@ -192,6 +192,8 @@ export default {
       return this.values.indexOf(v) > -1
     },
     select (v, autoClose) {
+      // 小标题被点击
+      if (!autoClose) return;
       if (this.val instanceof Array) {
         var newVal = this.val.slice(0)
         if (~newVal.indexOf(v)) {
