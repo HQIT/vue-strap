@@ -29,7 +29,7 @@
             <span class="glyphicon glyphicon-ok check-mark" v-show="val === null || val.length <= 0"></span>
           </a>
         </li>
-        <li v-for="option in filteredOptions"  :id="option[optionsValue]" :class="{'dropdown-header':option.separator}"><!--<li class="dropdown-header">Dropdown header</li>-->
+        <li v-for="option in filteredOptions"  :id="option[optionsValue]" :class="{'dropdown-header':option.separator}">
           <a v-if="option.separator" v-html="option[optionsLabel]"></a>
           <a v-else @mousedown.prevent="select(option[optionsValue])">
             <span v-html="option[optionsLabel]"></span>
@@ -298,6 +298,10 @@ export default {
   border-top: 4px solid \9;
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
+}
+.dropdown-header a {
+  padding-left: 0;
+  padding-right: 0;
 }
 .bs-searchbox {
   -webkit-box-sizing: border-box;
