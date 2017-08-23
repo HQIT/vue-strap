@@ -26,7 +26,7 @@
         <li v-if="required&&!clearButton">
           <a @mousedown.prevent="clear() && close()">
             <span>{{ placeholder || text.notSelected }}</span>
-            <span class="glyphicon glyphicon-ok check-mark" v-show="val === null || val.length <= 0"></span>
+            <span class="glyphicon glyphicon-ok check-mark" v-if="showDefaultPick" v-show="val === null || val.length <= 0"></span>
           </a>
         </li>
         <li v-for="option in filteredOptions"  :id="option[optionsValue]" :class="{'dropdown-header':option.separator}">
@@ -78,7 +78,7 @@ export default {
     value: null,
     content: {type: String, default: ''},
     minSelect: {type: Number, default: 0},
-    separators: {type: Object, default: null},
+    showDefaultPick: {type: Boolean, default: false},
   },
   data () {
     return {
@@ -302,6 +302,8 @@ export default {
 .dropdown-header a {
   padding-left: 0;
   padding-right: 0;
+  cursor: default;
+  color: #777;
 }
 .bs-searchbox {
   -webkit-box-sizing: border-box;
